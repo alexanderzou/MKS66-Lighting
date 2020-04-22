@@ -1,6 +1,6 @@
 from display import *
 from draw import *
-from parser import *
+from parse import *
 from matrix import *
 import math
 
@@ -9,24 +9,24 @@ import math
 view = [0,
         0,
         1];
-ambient = [50,
-           50,
-           50]
+ambient = [255,
+           0,
+           255]
 light = [[0.5,
           0.75,
           1],
          [0,
           255,
           255]]
-areflect = [0.1,
-            0.1,
-            0.1]
-dreflect = [0.5,
-            0.5,
-            0.5]
-sreflect = [0.5,
-            0.5,
-            0.5]
+areflect = [1,
+            1,
+            1]
+dreflect = [0,
+            0,
+            0]
+sreflect = [0,
+            0,
+            0]
 
 
 
