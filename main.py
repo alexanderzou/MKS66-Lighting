@@ -18,12 +18,12 @@ light = [[0.5,
          [0,
           255,
           255]]
-areflect = [1,
-            1,
-            1]
-dreflect = [0,
+areflect = [0,
             0,
             0]
+dreflect = [1,
+            1,
+            1]
 sreflect = [0,
             0,
             0]
