@@ -24,11 +24,13 @@ SPECULAR_EXP = 4
 def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
     normalize(normal)
     normalize(light[0])
+    normalize(view)
     amb = calculate_ambient(ambient, areflect)
     dif = calculate_diffuse(light, dreflect, normal)
-    r = limit_color(amb[0]) + limit_color(dif[0])
-    g = limit_color(amb[1]) + limit_color(dif[1])
-    b = limit_color(amb[2]) + limit_color(dif[2])
+    spe = calculate_specular(light, sreflect, view, normal)
+    r = limit_color(amb[0]) + limit_color(dif[0]) + limit_color(spe[0])
+    g = limit_color(amb[1]) + limit_color(dif[1]) + limit_color(spe[1])
+    b = limit_color(amb[2]) + limit_color(dif[2]) + limit_color(spe[2])
     return [r, g, b]
 
 def calculate_ambient(alight, areflect):
@@ -45,11 +47,27 @@ def calculate_diffuse(light, dreflect, normal):
     return [rDif, gDif, bDif]
 
 def calculate_specular(light, sreflect, view, normal):
-    pass
+    #print('---')
+    bracket = max(0, dot_product(light[0], normal))
+    #print(bracket)
+    bracket = vectConst(normal, 2*bracket)
+    #print(bracket)
+    bracket = vectSub(bracket, light[0])
+    #print(bracket)
+    bracket = dot_product(bracket, view)
+    #print(bracket)
+    bracket = bracket ** 5
+    #print(bracket)
+    rSpe = light[1][0] * sreflect[0] * bracket
+    gSpe = light[1][1] * sreflect[1] * bracket
+    bSpe = light[1][2] * sreflect[2] * bracket
+    return [rSpe, gSpe, bSpe]
 
 def limit_color(color):
-    if color < 0 or color > 255:
+    if color < 0:
         return 0
+    elif color > 255:
+        return 255
     else:
         return int(color)
 
@@ -87,3 +105,11 @@ def calculate_normal(polygons, i):
     N[2] = A[0] * B[1] - A[1] * B[0]
 
     return N
+
+#Vector subtraction
+def vectSub(v1, v2):
+    return [v1[0]-v2[0], v1[1]-v2[1], v1[2]-v2[2]]
+    
+#Vector multiplication by a constant
+def vectConst(v, c):
+    return [c*v[0], c*v[1], c*v[2]]

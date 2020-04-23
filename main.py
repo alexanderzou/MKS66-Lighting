@@ -21,12 +21,12 @@ light = [[0.5,
 areflect = [0,
             0,
             0]
-dreflect = [1,
-            1,
-            1]
-sreflect = [0,
+dreflect = [0,
             0,
             0]
+sreflect = [1,
+            1,
+            1]
 
 
 
