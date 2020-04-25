@@ -28,9 +28,12 @@ def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
     amb = calculate_ambient(ambient, areflect)
     dif = calculate_diffuse(light, dreflect, normal)
     spe = calculate_specular(light, sreflect, view, normal)
-    r = limit_color(amb[0]) + limit_color(dif[0]) + limit_color(spe[0])
-    g = limit_color(amb[1]) + limit_color(dif[1]) + limit_color(spe[1])
-    b = limit_color(amb[2]) + limit_color(dif[2]) + limit_color(spe[2])
+    r = limit_color(amb[0] + dif[0] + spe[0])
+    g = limit_color(amb[1] + dif[1] + spe[1])
+    b = limit_color(amb[2] + dif[2] + spe[2])
+    # r = limit_color(amb[0]) + limit_color(dif[0]) + limit_color(spe[0])
+    # g = limit_color(amb[1]) + limit_color(dif[1]) + limit_color(spe[1])
+    # b = limit_color(amb[2]) + limit_color(dif[2]) + limit_color(spe[2])
     return [r, g, b]
 
 def calculate_ambient(alight, areflect):
@@ -41,6 +44,7 @@ def calculate_ambient(alight, areflect):
 
 def calculate_diffuse(light, dreflect, normal):
     dot = dot_product(light[0], normal)
+    dot = max(0, dot)
     rDif = light[1][0] * dreflect[0] * dot
     gDif = light[1][1] * dreflect[1] * dot
     bDif = light[1][2] * dreflect[2] * dot
@@ -48,7 +52,7 @@ def calculate_diffuse(light, dreflect, normal):
 
 def calculate_specular(light, sreflect, view, normal):
     #print('---')
-    bracket = max(0, dot_product(light[0], normal))
+    bracket = dot_product(light[0], normal)
     #print(bracket)
     bracket = vectConst(normal, 2*bracket)
     #print(bracket)
@@ -56,7 +60,8 @@ def calculate_specular(light, sreflect, view, normal):
     #print(bracket)
     bracket = dot_product(bracket, view)
     #print(bracket)
-    bracket = bracket ** 5
+    bracket = max(0, bracket)
+    bracket = bracket ** 10
     #print(bracket)
     rSpe = light[1][0] * sreflect[0] * bracket
     gSpe = light[1][1] * sreflect[1] * bracket
